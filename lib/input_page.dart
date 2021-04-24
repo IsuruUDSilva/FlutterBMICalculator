@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'icon_content.dart';
+import 'reusable_card.dart';
 
-const cardColour = Color(0xFF1D1F33);
-const bottomCardColor = Color(0xFFEB1555);
+enum Gender{
+  Male,
+  Female,
+}
+
 
 class InputPage extends StatefulWidget {
   @override
@@ -9,6 +15,25 @@ class InputPage extends StatefulWidget {
 }
 
 class _InputPageState extends State<InputPage> {
+
+  Color maleCardColor = inactiveCardColor;
+  Color femaleCardColor = inactiveCardColor;
+
+  Gender selectedGender;
+
+  // void updateColor(Gender selectedGender){
+  //   if(selectedGender==Gender.Male){
+  //     maleCardColor = cardColour;
+  //     femaleCardColor = inactiveCardColor;
+  //   }else if(selectedGender == Gender.Female){
+  //     femaleCardColor = cardColour;
+  //     maleCardColor = inactiveCardColor;
+  //   }
+  // }
+
+  // void updateColors(Gender selectedGender){
+  //   selectedGender == Gender.Male ? maleCardColor = maleCardColor  femaleCardColor = inactiveCardColor;
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -23,15 +48,35 @@ class _InputPageState extends State<InputPage> {
                 // crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Expanded(
-                    child: ReusableCard(
-                      colour: cardColour,
+                    child: GestureDetector(
+                      onTap: (){
+                        print("male card was tapped");
+                        setState(() {
+                          selectedGender = Gender.Male;
+                        });
+                      },
+                      child: GenderCard(
+                        icon: FontAwesomeIcons.mars,
+                        label: "MALE",
+                        colors: selectedGender==Gender.Male? cardColour : inactiveCardColor,
+                      ),
                     ),
                   ),
                   Expanded(
-                    child: ReusableCard(
-                      colour: cardColour,
-                    ),
-                  )
+                    child: GestureDetector(
+                      onTap: (){
+                        setState(() {
+                          selectedGender = Gender.Female;
+                          print("tap on female");
+                        });
+                      },
+                      child: GenderCard(
+                        icon: FontAwesomeIcons.venus,
+                        label: "FEMALE",
+                        colors: selectedGender==Gender.Female? cardColour : inactiveCardColor,
+                      ),
+                    )
+                  ),
                 ],
               ),
             ),
@@ -61,8 +106,8 @@ class _InputPageState extends State<InputPage> {
               ],
             )),
             Container(
-              color: bottomCardColor ,
-              margin: EdgeInsets.only(top:10.0),
+              color: bottomCardColor,
+              margin: EdgeInsets.only(top: 10.0),
               width: double.infinity,
               height: 70,
             )
@@ -71,19 +116,5 @@ class _InputPageState extends State<InputPage> {
   }
 }
 
-class ReusableCard extends StatelessWidget {
-  ReusableCard({@required this.colour});
 
-  final Color colour;
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.all(15),
-      decoration:
-          BoxDecoration(color: colour, borderRadius: BorderRadius.circular(15)),
-      // height: 50,
-      // width: 50,
-    );
-  }
-}
